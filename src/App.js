@@ -47,27 +47,17 @@ function TextExpander({
   const [collapsed, setCollapsed] = useState(!expanded);
 
   const text = children;
-  const words = text.split(' ');
-  const textPart = words
-    .slice()
-    .filter((word, i) => i < collapsedNumWords)
-    .join(' ');
+  const textPart = text.split(' ').slice(0, collapsedNumWords).join(' ');
 
   return (
-    <div>
-      <div className={className}>
-        {
-          <>
-            {collapsed ? textPart : text}
-            <Button
-              color={buttonColor}
-              collapsed={collapsed}
-              onCollapsed={() => setCollapsed(!collapsed)}
-              buttonText={collapsed ? expandButtonText : collapseButtonText}
-            />
-          </>
-        }
-      </div>
+    <div className={className}>
+      <span>{collapsed ? textPart : text}</span>
+      <Button
+        color={buttonColor}
+        collapsed={collapsed}
+        onCollapsed={() => setCollapsed(!collapsed)}
+        buttonText={collapsed ? expandButtonText : collapseButtonText}
+      />
     </div>
   );
 }
@@ -76,6 +66,7 @@ function Button({ color, onCollapsed, buttonText }) {
   const buttonStyle = {
     fontWeight: 'bold',
     color,
+    cursor: 'pointer',
   };
 
   return (
