@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './index.css';
 
 export default function App() {
@@ -34,6 +35,52 @@ export default function App() {
   );
 }
 
-function TextExpander() {
-  return <div>TODO</div>;
+function TextExpander({
+  children,
+  collapsedNumWords = 15,
+  expandButtonText = 'More',
+  collapseButtonText = 'Less',
+  className = '',
+  expanded = false,
+  buttonColor = 'black',
+}) {
+  const [collapsed, setCollapsed] = useState(!expanded);
+
+  const text = children;
+  const words = text.split(' ');
+  const textPart = words
+    .slice()
+    .filter((word, i) => i < collapsedNumWords)
+    .join(' ');
+
+  return (
+    <div>
+      <div className={className}>
+        {
+          <>
+            {collapsed ? textPart : text}
+            <Button
+              color={buttonColor}
+              collapsed={collapsed}
+              onCollapsed={() => setCollapsed(!collapsed)}
+              buttonText={collapsed ? expandButtonText : collapseButtonText}
+            />
+          </>
+        }
+      </div>
+    </div>
+  );
+}
+
+function Button({ color, onCollapsed, buttonText }) {
+  const buttonStyle = {
+    fontWeight: 'bold',
+    color,
+  };
+
+  return (
+    <span style={buttonStyle} onClick={onCollapsed}>
+      ...{buttonText}
+    </span>
+  );
 }
